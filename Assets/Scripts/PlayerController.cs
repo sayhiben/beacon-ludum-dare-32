@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour {
 
 	private float nextFire;
 	private float energy;
+	private bool canMove = true;
 
 	void Start(){
 		energy = maxEnergy;
@@ -40,11 +41,26 @@ public class PlayerController : MonoBehaviour {
 		float moveX = Input.GetAxis("Horizontal");
 		float moveY = Input.GetAxis("Vertical");
 
-		Vector3	movement = new Vector3(moveX, 0.0f, moveY);
-
-		rigidbody.AddRelativeForce(movement * speed * Time.deltaTime);
+		if(canMove) {
+			Vector3	movement = new Vector3(moveX, 0.0f, moveY);
+			rigidbody.AddRelativeForce(movement * speed * Time.deltaTime);
+		} else {
+			rigidbody.velocity = Vector3.zero;
+		}
 
 		transform.Rotate(Vector3.up, rotateSpeed * moveX * Time.deltaTime);
+	}
+
+	public void DisableMovement(){
+		canMove = false;
+	}
+
+	public void EnableMovement(){
+		canMove = true;
+	}
+
+	public bool CanMove(){
+		return canMove;
 	}
 
 	private void UpdateLighting(){
@@ -52,11 +68,11 @@ public class PlayerController : MonoBehaviour {
 			(energy / maxEnergy) * maxIntensity,
 			minIntensity,
 			maxIntensity
-			);
+		);
 		playerLight.range = Mathf.Clamp(
 			(energy / maxEnergy) * maxSpotAngle,
 			minSpotAngle,
 			maxSpotAngle
-			);
+		);
 	}
 }
