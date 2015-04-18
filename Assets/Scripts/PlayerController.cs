@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour {
 			minIntensity,
 			maxIntensity
 			);
-		playerLight.spotAngle = Mathf.Clamp(
+		playerLight.range = Mathf.Clamp(
 			(energy / maxEnergy) * maxSpotAngle,
 			minSpotAngle,
 			maxSpotAngle
