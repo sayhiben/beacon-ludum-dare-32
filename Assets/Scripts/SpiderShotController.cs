@@ -24,6 +24,9 @@ public class SpiderShotController : MonoBehaviour {
 			Instantiate(webTrap, other.transform.position, Quaternion.identity);
 			Destroy (gameObject);
 		}
+		if(other.tag == "Wall") {
+			Destroy (gameObject);
+		}
 	}
 	
 }

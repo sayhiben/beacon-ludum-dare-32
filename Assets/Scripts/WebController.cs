@@ -14,7 +14,6 @@ public class WebController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other){
-		Debug.Log(other.gameObject.tag);
 		if(other.gameObject.tag == "Player Shot"){
 			HandleHits(other);
 		} else if(other.gameObject.tag == "Player"){
