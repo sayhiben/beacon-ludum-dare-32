@@ -12,24 +12,34 @@ public class PlayerController : MonoBehaviour {
 	public float fireDelay = 0.5f;
 	public float fireCost = 5.0f;
 	public float rotateSpeed = 50.0f;
+	public float jumpCost = 30.0f;
+	public float jumpPower = 1500.0f;
+	public float jumpLightMultiplier = 1.5f;
 
 	public GameObject playerShot;
 	public Transform shotSpawn;
 	public Light playerLight;
-	public Camera mainCamera;
+	public Camera mainCamera; 
 
 	private float nextFire;
 	private float energy;
-	private bool canMove = true;
+	private bool inWeb = false;
+	private bool isJumping = false;
+	private Rigidbody rigidbody;
 
 	void Start(){
 		energy = maxEnergy;
+		rigidbody = GetComponent<Rigidbody>();
 	}
 
 	void Update(){
 		UpdateLighting ();
+		HandleFire();
+		StayOnTheFloor();
+	}
 
-		if(Input.GetButton("Fire1") && Time.time > nextFire) {
+	void HandleFire(){
+		if(Input.GetButton("Fire1") && Time.time > nextFire && energy >= fireCost) {
 			nextFire = Time.time + fireDelay;
 			Instantiate(playerShot, shotSpawn.position, transform.rotation);
 			energy -= fireCost;
@@ -37,11 +47,11 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void FixedUpdate(){
-		Rigidbody rigidbody = GetComponent<Rigidbody>();
 		float moveX = Input.GetAxis("Horizontal");
 		float moveY = Input.GetAxis("Vertical");
+		HandleJump ();
 
-		if(canMove) {
+		if(CanMove()) {
 			Vector3	movement = new Vector3(moveX, 0.0f, moveY);
 			rigidbody.AddRelativeForce(movement * speed * Time.deltaTime);
 		} else {
@@ -50,29 +60,67 @@ public class PlayerController : MonoBehaviour {
 
 		transform.Rotate(Vector3.up, rotateSpeed * moveX * Time.deltaTime);
 	}
-
-	public void DisableMovement(){
-		canMove = false;
+	
+	void HandleJump(){
+		if(Input.GetKey(KeyCode.Space) && CanJump() && energy >= jumpCost){
+			rigidbody.useGravity = true;
+			isJumping = true;
+			energy -= jumpCost;
+			rigidbody.AddRelativeForce(Vector3.up * jumpPower);
+			BurstLight();
+		}
+		if(isJumping && rigidbody.velocity.y <= 0){
+			Physics.gravity = Vector3.down * 1500.0f;
+		}
 	}
 
-	public void EnableMovement(){
-		canMove = true;
+	bool CanJump(){
+		return !isJumping && !inWeb;
 	}
 
-	public bool CanMove(){
-		return canMove;
+	bool CanMove(){
+		return !isJumping && !inWeb;
+	}
+	
+	void BurstLight(){
+		playerLight.range = maxSpotAngle * jumpLightMultiplier;
+	}
+	
+	void StayOnTheFloor(){
+		if(transform.position.y <= 1){
+			if(isJumping){
+				isJumping = false;
+				rigidbody.useGravity = false;
+				Physics.gravity = Vector3.down * -9.81f;
+			}
+			transform.position = new Vector3(transform.position.x, 1.0f, transform.position.z);
+		}
+	}
+
+	public void WebSnare(){
+		inWeb = true;
+	}
+
+	public void WebFreed() {
+		inWeb = false;
+	}
+
+	public bool InWeb(){
+		return inWeb;
 	}
 
 	private void UpdateLighting(){
-		playerLight.intensity = Mathf.Clamp(
-			(energy / maxEnergy) * maxIntensity,
-			minIntensity,
-			maxIntensity
-		);
-		playerLight.range = Mathf.Clamp(
-			(energy / maxEnergy) * maxSpotAngle,
-			minSpotAngle,
-			maxSpotAngle
-		);
+		if(!isJumping){
+			playerLight.intensity = Mathf.Clamp(
+				(energy / maxEnergy) * maxIntensity,
+				minIntensity,
+				maxIntensity
+			);
+			playerLight.range = Mathf.Clamp(
+				(energy / maxEnergy) * maxSpotAngle,
+				minSpotAngle,
+				maxSpotAngle
+			);
+		}
 	}
 }
