@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour {
 
 	private float nextFire;
 	private float energy;
-	private bool canMove = true;
+	private bool inWeb = false;
 
 	void Start(){
 		energy = maxEnergy;
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour {
 		float moveX = Input.GetAxis("Horizontal");
 		float moveY = Input.GetAxis("Vertical");
 
-		if(canMove) {
+		if(!inWeb) {
 			Vector3	movement = new Vector3(moveX, 0.0f, moveY);
 			rigidbody.AddRelativeForce(movement * speed * Time.deltaTime);
 		} else {
@@ -51,16 +51,13 @@ public class PlayerController : MonoBehaviour {
 		transform.Rotate(Vector3.up, rotateSpeed * moveX * Time.deltaTime);
 	}
 
-	public void DisableMovement(){
-		canMove = false;
+
+	public void WebSnare(){
+		inWeb = true;
 	}
 
-	public void EnableMovement(){
-		canMove = true;
-	}
-
-	public bool CanMove(){
-		return canMove;
+	public bool InWeb(){
+		return inWeb;
 	}
 
 	private void UpdateLighting(){
