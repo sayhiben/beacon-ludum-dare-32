@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour {
 	public float fireDelay = 0.5f;
 	public float fireCost = 5.0f;
 	public float rotateSpeed = 50.0f;
+	public float jumpCost = 30.0f;
+	public float jumpPower = 20.0f;
 
 	public GameObject playerShot;
 	public Transform shotSpawn;
@@ -21,6 +23,7 @@ public class PlayerController : MonoBehaviour {
 	private float nextFire;
 	private float energy;
 	private bool canMove = true;
+	private bool isJumping = false;
 
 	void Start(){
 		energy = maxEnergy;
@@ -29,10 +32,25 @@ public class PlayerController : MonoBehaviour {
 	void Update(){
 		UpdateLighting ();
 
+		if(transform.position.y <= 1){
+			if(isJumping){
+				isJumping = false;
+				canMove = true;
+			}
+			transform.position = new Vector3(transform.position.x, 1.0f, transform.position.z);
+		}
+
 		if(Input.GetButton("Fire1") && Time.time > nextFire) {
 			nextFire = Time.time + fireDelay;
 			Instantiate(playerShot, shotSpawn.position, transform.rotation);
 			energy -= fireCost;
+		}
+
+		if(Input.GetKey(KeyCode.Space) && canMove){
+			canMove = false;
+			isJumping = true;
+			energy -= jumpCost;
+			GetComponent<Rigidbody>().AddForce(Vector3.up * jumpPower);
 		}
 	}
 
