@@ -21,7 +21,7 @@ public class SpiderController : EnemyController {
 	}
 
 	void Update(){
-		transform.localEulerAngles = new Vector3 (30, Camera.main.transform.eulerAngles.y - 180, 0);
+		transform.LookAt(player.transform.position);
 
 		if(InRange() && Time.time >= nextFire && !player.GetComponent<PlayerController>().InWeb()){
 			nextFire = Time.time + fireDelay;
