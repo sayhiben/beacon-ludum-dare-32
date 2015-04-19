@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour {
 	private bool inWeb = false;
 	private bool isJumping = false;
 	private Rigidbody rbody;
+	private GameObject webSnare;
 
 	void Start(){
 		energy = maxEnergy;
@@ -75,11 +76,11 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	bool CanJump(){
-		return !isJumping && !inWeb;
+		return !isJumping && !InWeb ();
 	}
 
 	bool CanMove(){
-		return !isJumping && !inWeb;
+		return !isJumping && !InWeb ();
 	}
 	
 	void BurstLight(){
@@ -101,16 +102,12 @@ public class PlayerController : MonoBehaviour {
 		energy -= damage;
 	}
 
-	public void WebSnare(){
-		inWeb = true;
-	}
-
-	public void WebFreed() {
-		inWeb = false;
+	public void WebSnare(GameObject web){
+		webSnare = web;
 	}
 
 	public bool InWeb(){
-		return inWeb;
+		return webSnare != null;
 	}
 
 	private void UpdateLighting(){

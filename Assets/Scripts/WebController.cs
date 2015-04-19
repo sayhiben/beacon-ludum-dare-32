@@ -10,7 +10,7 @@ public class WebController : MonoBehaviour {
 
 	void Start(){
 		player = GameObject.Find("Player");
-		health =  maxHealth;
+		health = maxHealth;
 	}
 
 	void OnTriggerEnter(Collider other){
@@ -24,12 +24,11 @@ public class WebController : MonoBehaviour {
 	void HandleHits(Collider other){
 		health--;
 		if(health <= 0){
-			player.GetComponent<PlayerController>().WebFreed();
 			Destroy (gameObject);
 		}
 	}
 
 	void HandlePlayer(Collider other) {
-		other.gameObject.GetComponent<PlayerController>().WebSnare();
+		other.gameObject.GetComponent<PlayerController>().WebSnare(gameObject);
 	}
 }
