@@ -20,7 +20,7 @@ public class SpiderController : MonoBehaviour {
 	}
 
 	void Update(){
-		transform.localEulerAngles = new Vector3 (30, mainCamera.transform.eulerAngles.y - 180, 0);
+		transform.localEulerAngles = new Vector3 (30, Camera.main.transform.eulerAngles.y - 180, 0);
 
 		if(InRange() && Time.time >= nextFire){
 			nextFire = Time.time + fireDelay;
