@@ -25,11 +25,11 @@ public class PlayerController : MonoBehaviour {
 	private float energy;
 	private bool inWeb = false;
 	private bool isJumping = false;
-	private Rigidbody rigidbody;
+	private Rigidbody rbody;
 
 	void Start(){
 		energy = maxEnergy;
-		rigidbody = GetComponent<Rigidbody>();
+		rbody = GetComponent<Rigidbody>();
 	}
 
 	void Update(){
@@ -53,9 +53,9 @@ public class PlayerController : MonoBehaviour {
 
 		if(CanMove()) {
 			Vector3	movement = new Vector3(moveX, 0.0f, moveY);
-			rigidbody.AddRelativeForce(movement * speed * Time.deltaTime);
+			rbody.AddRelativeForce(movement * speed * Time.deltaTime);
 		} else {
-			rigidbody.velocity = Vector3.zero;
+			rbody.velocity = Vector3.zero;
 		}
 
 		transform.Rotate(Vector3.up, rotateSpeed * moveX * Time.deltaTime);
@@ -63,13 +63,13 @@ public class PlayerController : MonoBehaviour {
 	
 	void HandleJump(){
 		if(Input.GetKey(KeyCode.Space) && CanJump() && energy >= jumpCost){
-			rigidbody.useGravity = true;
+			rbody.useGravity = true;
 			isJumping = true;
 			energy -= jumpCost;
-			rigidbody.AddRelativeForce(Vector3.up * jumpPower);
+			rbody.AddRelativeForce(Vector3.up * jumpPower);
 			BurstLight();
 		}
-		if(isJumping && rigidbody.velocity.y <= 0){
+		if(isJumping && rbody.velocity.y <= 0){
 			Physics.gravity = Vector3.down * 1500.0f;
 		}
 	}
@@ -90,11 +90,15 @@ public class PlayerController : MonoBehaviour {
 		if(transform.position.y <= 1){
 			if(isJumping){
 				isJumping = false;
-				rigidbody.useGravity = false;
+				rbody.useGravity = false;
 				Physics.gravity = Vector3.down * -9.81f;
 			}
 			transform.position = new Vector3(transform.position.x, 1.0f, transform.position.z);
 		}
+	}
+
+	public void Hit(float damage){
+		energy -= damage;
 	}
 
 	public void WebSnare(){
