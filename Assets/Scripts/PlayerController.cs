@@ -27,9 +27,11 @@ public class PlayerController : MonoBehaviour {
 	private bool isJumping = false;
 	private Rigidbody rbody;
 	private GameObject webSnare;
+	private Vector3 startPosition;
 
 	void Start(){
 		energy = maxEnergy;
+		startPosition = transform.position;
 		rbody = GetComponent<Rigidbody>();
 	}
 
@@ -88,13 +90,12 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void StayOnTheFloor(){
-		if(transform.position.y <= 1){
-			if(isJumping){
-				isJumping = false;
-				rbody.useGravity = false;
-				Physics.gravity = Vector3.down * -9.81f;
-			}
-			transform.position = new Vector3(transform.position.x, 1.0f, transform.position.z);
+		if(isJumping && transform.position.y <= startPosition.y){
+			isJumping = false;
+			rbody.useGravity = false;
+			Physics.gravity = Vector3.down * -9.81f;
+		} else {
+			transform.position = new Vector3(transform.position.x, startPosition.y, transform.position.z);
 		}
 	}
 

@@ -7,7 +7,7 @@ public class FrogController : MonoBehaviour {
 	public float hitDamage = 20.0f;
 	public float tongueOutSpeed = 1.5f;
 	public float tongueInSpeed = 1.0f;
-	public float maxTongueLength = 10.0f;
+	public float maxTongueLength = 3.0f;
 
 	public GameObject tongue;
 

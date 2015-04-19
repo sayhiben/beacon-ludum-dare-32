@@ -8,12 +8,12 @@ public class DamageOnCollide : MonoBehaviour {
 	public float pushbackPower = 5.0f;
 
 	void OnTriggerEnter(Collider other){
-		if(enablePushback){
-			Vector3 pushbackDirection = (other.transform.position - transform.position).normalized;
-			pushbackDirection.y = 0;
-			other.GetComponent<Rigidbody>().AddForce(pushbackDirection * pushbackPower);
-		}
 		if(other.tag == "Player"){
+			if(enablePushback){
+				Vector3 pushbackDirection = (other.transform.position - transform.position).normalized;
+				pushbackDirection.y = 0;
+				other.GetComponent<Rigidbody>().AddForce(pushbackDirection * pushbackPower);
+			}
 			other.GetComponent<PlayerController>().Hit(damage);
 		}
 	}
