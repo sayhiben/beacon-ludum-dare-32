@@ -25,12 +25,12 @@ public class WebController : MonoBehaviour {
 	void HandleHits(Collider other){
 		health--;
 		if(health <= 0){
-			player.GetComponent<PlayerController>().EnableMovement();
+			player.GetComponent<PlayerController>().WebFreed();
 			Destroy (gameObject);
 		}
 	}
 
 	void HandlePlayer(Collider other) {
-		other.gameObject.GetComponent<PlayerController>().DisableMovement();
+		other.gameObject.GetComponent<PlayerController>().WebSnare();
 	}
 }
