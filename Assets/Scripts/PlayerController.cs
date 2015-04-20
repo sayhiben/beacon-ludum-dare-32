@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour {
 	public float jumpPower = 1500.0f;
 	public float jumpLightMultiplier = 1.5f;
 	public float animationSpeed = 0.25f;
+	public float turnMultiplier = 0.25f;
 
 	public GameObject playerShot;
 	public Transform shotSpawn;
@@ -29,7 +30,6 @@ public class PlayerController : MonoBehaviour {
 	private float nextFire;
 	private float nextAnimationTime;
 	private float energy;
-	private bool inWeb = false;
 	private bool isJumping = false;
 	private Rigidbody rbody;
 	private GameObject webSnare;
@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour {
 		HandleJump ();
 
 		if(CanMove()) {
-			Vector3	movement = new Vector3(moveX, 0.0f, moveY);
+			Vector3	movement = new Vector3(moveX * turnMultiplier, 0.0f, moveY);
 			rbody.AddRelativeForce(movement * speed * Time.deltaTime);
 		} else {
 			rbody.velocity = Vector3.zero;

@@ -13,11 +13,13 @@ public class FrogController : MonoBehaviour {
 
 	private bool isAttacking = false;
 	private float nextAttack;
-	private float originalTongueLength;
+	private Vector3 originalScale;
+	private Vector3 originalPosition;
 	private bool isExpanding = false;
 
 	void Start(){
-		originalTongueLength = tongue.transform.localScale.z;
+		originalScale = tongue.transform.localScale;
+		originalPosition = tongue.transform.position;
 	}
 
 	void FixedUpdate () {
@@ -36,26 +38,19 @@ public class FrogController : MonoBehaviour {
 			}
 
 			// expand/contract
-			tongue.transform.localScale = new Vector3(
-				tongue.transform.localScale.x, 
-				tongue.transform.localScale.y, 
-				tongue.transform.localScale.z + expandSpeed * Time.deltaTime
+			tongue.transform.localScale += new Vector3(
+				0.0f, 
+				0.0f, 
+				tongue.transform.localScale.z * expandSpeed
 			);
 
 			// adjust position based on scale
-			tongue.transform.position = new Vector3(
-				tongue.transform.position.x,
-				tongue.transform.position.y,
-				tongue.transform.position.z - expandSpeed * Time.deltaTime * 5.0f
-				);
+			tongue.transform.position -= tongue.transform.forward * expandSpeed * 8.0f;
 
 			// check for contracted all the way and stop attacking
-			if(!isExpanding && tongue.transform.localScale.z <= originalTongueLength){
-				tongue.transform.localScale = new Vector3(
-					tongue.transform.localScale.x, 
-					tongue.transform.localScale.y, 
-					originalTongueLength
-				);
+			if(!isExpanding && tongue.transform.localScale.z <= originalScale.z){
+				tongue.transform.localScale = originalScale;
+				tongue.transform.position = originalPosition;
 				isAttacking = false;
 				nextAttack = Time.time + attackFrequency;
 			}
