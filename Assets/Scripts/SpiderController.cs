@@ -16,13 +16,18 @@ public class SpiderController : EnemyController {
 
 	private float nextFire;
 	private GameObject player;
+	private bool isQuitting;
 
 	void Start(){
 		player = GameObject.Find ("Player");
 	}
+
+	void OnApplicationQuit(){
+		isQuitting = true;
+	}
 	
 	void OnDestroy(){
-		if(healthToDrop > 0){
+		if(!isQuitting && healthToDrop > 0){
 			GameObject healthGrub = (GameObject)Instantiate(Resources.Load("Health Grub"));
 			healthGrub.GetComponent<HealthGrubController>().healAmount = healthToDrop;
 			healthGrub.transform.position = transform.position;
