@@ -4,6 +4,7 @@ using System.Collections;
 public class WebController : MonoBehaviour {
 
 	public int maxHealth = 3;
+	public AudioSource breakSound;
 
 	private GameObject player;
 	private int health;
@@ -24,6 +25,7 @@ public class WebController : MonoBehaviour {
 	void HandleHits(Collider other){
 		health--;
 		if(health <= 0){
+			breakSound.Play ();
 			Destroy (gameObject);
 		}
 	}

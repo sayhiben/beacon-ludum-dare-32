@@ -26,6 +26,10 @@ public class PlayerController : MonoBehaviour {
 	public GameObject bodyBillboard;
 	public Texture[] wingFrames;
 	public Texture[] bodyFrames;
+	public AudioSource shootSound;
+	public AudioSource healSound;
+	public AudioSource webSnareSound;
+	public AudioSource hurtSound;
 
 	private float nextFire;
 	private float nextAnimationTime;
@@ -55,12 +59,13 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	public void Heal(float healAmount){
+		healSound.Play ();
 		energy += healAmount;
 	}
 
 	void UpdatePlayerBody(){
 		int newFrame = (int)Mathf.Ceil(EnergyPercent() / 0.2f);
-		if(newFrame != bodyFrame && newFrame > 0 && newFrame < bodyFrames.Length){
+		if(newFrame != bodyFrame && newFrame < bodyFrames.Length){
 			bodyFrame = newFrame;
 			MeshRenderer renderer = bodyBillboard.GetComponent<MeshRenderer>();
 			renderer.material.mainTexture = bodyFrames[bodyFrame];
@@ -72,13 +77,13 @@ public class PlayerController : MonoBehaviour {
 			nextFire = Time.time + fireDelay;
 			Instantiate(playerShot, shotSpawn.position, transform.rotation);
 			energy -= fireCost;
+			shootSound.Play();
 		}
 	}
 
 	void FixedUpdate(){
 		float moveX = Input.GetAxis("Horizontal");
 		float moveY = Input.GetAxis("Vertical");
-		HandleJump ();
 
 		if(CanMove()) {
 			Vector3	movement = new Vector3(moveX * turnMultiplier, 0.0f, moveY);
@@ -96,9 +101,28 @@ public class PlayerController : MonoBehaviour {
 				}
 				nextAnimationTime = Time.time + animationSpeed;
 			}
+			PlayWingSound();
+		} else {
+			StopWingSound();
+			wingFrame = 3; // closed
+			Animate ();
 		}
 
 		transform.Rotate(Vector3.up, rotateSpeed * moveX * Time.deltaTime);
+	}
+
+	void PlayWingSound(){
+		AudioSource wingSound = gameObject.GetComponent<AudioSource>();
+		if(!wingSound.isPlaying){
+			wingSound.Play();
+		}
+	}
+
+	void StopWingSound(){
+		AudioSource wingSound = gameObject.GetComponent<AudioSource>();
+		if(wingSound.isPlaying){
+			wingSound.Stop();
+		}
 	}
 
 	void Animate(){
@@ -142,10 +166,12 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	public void Hit(float damage){
+		hurtSound.Play();
 		energy -= damage;
 	}
 
 	public void WebSnare(GameObject web){
+		webSnareSound.Play();
 		webSnare = web;
 	}
 

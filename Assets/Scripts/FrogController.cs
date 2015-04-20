@@ -10,6 +10,7 @@ public class FrogController : MonoBehaviour {
 	public float maxTongueLength = 3.0f;
 
 	public GameObject tongue;
+	public AudioSource tongueSound;
 
 	private bool isAttacking = false;
 	private float nextAttack;
@@ -26,6 +27,9 @@ public class FrogController : MonoBehaviour {
 		if(!isAttacking && Time.time >= nextAttack){
 			isAttacking = true;
 			isExpanding = true;
+			if(!tongueSound.isPlaying){
+				tongueSound.Play ();
+			}
 		}
 
 		if(isAttacking){
