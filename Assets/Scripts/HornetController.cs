@@ -16,6 +16,7 @@ public class HornetController : EnemyController {
 	private float nextFrame;
 	private bool isQuitting = false;
 	private Rigidbody rbody;
+	private float startMagnitude;
 	
 	void AnimateFlying(){
 		if(Time.time >= nextFrame){
@@ -43,7 +44,15 @@ public class HornetController : EnemyController {
 	// Use this for initialization
 	void Start () {
 		rbody = GetComponent<Rigidbody>();
-		rbody.AddForce(transform.forward * speed);
+		rbody.velocity = transform.forward * speed;
+	}
+
+//	void OnCollisionEnter (){
+//		startMagnitude = rbody.velocity.magnitude;
+//	}
+//
+	void OnCollisionEnter (){
+		rbody.velocity = rbody.velocity.normalized * speed;
 	}
 	
 	// Update is called once per frame
