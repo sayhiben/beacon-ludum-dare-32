@@ -97,7 +97,7 @@ public class BirdController : MonoBehaviour {
 	}
 
 	bool InAttackRange(){
-		return Vector3.Distance(player.transform.position, transform.position) >= aggroDistance;
+		return Vector3.Distance(player.transform.position, transform.position) <= aggroDistance;
 	}
 
 	void OnTriggerEnter(Collider other){

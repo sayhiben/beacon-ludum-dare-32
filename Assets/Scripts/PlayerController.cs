@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour {
 
 	void UpdatePlayerBody(){
 		int newFrame = (int)Mathf.Ceil(EnergyPercent() / 0.2f);
-		if(newFrame != bodyFrame){
+		if(newFrame != bodyFrame && newFrame > 0 && newFrame < bodyFrames.Length){
 			bodyFrame = newFrame;
 			MeshRenderer renderer = bodyBillboard.GetComponent<MeshRenderer>();
 			renderer.material.mainTexture = bodyFrames[bodyFrame];
