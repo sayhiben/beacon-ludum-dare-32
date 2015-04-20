@@ -16,9 +16,10 @@ public class BirdController : MonoBehaviour {
 	public float attackInSpeed = 1.0f;
 	public float attackOutSpeed = 1.0f;
 	public float snapDistance = 0.5f;
-
-	public GameObject player;
-
+	public float healthToDrop = 0.0f;
+	public GameObject lootAnchor;
+	
+	private GameObject player;
 	private int wingsTexture = 0;
 	private bool isFlying = false;
 	private bool isAttacking = false;
@@ -30,6 +31,7 @@ public class BirdController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		originalPosition = transform.position;
+		player = GameObject.Find ("Player");
 	}
 	
 	// Update is called once per frame
@@ -50,7 +52,7 @@ public class BirdController : MonoBehaviour {
 			AnimateAttacking();
 		}
 	}
-	
+
 	void AnimateFlying(){
 		if(Time.time >= nextFlyFrame){
 			MeshRenderer renderer = wingsPlane.GetComponent<MeshRenderer>();
@@ -107,6 +109,11 @@ public class BirdController : MonoBehaviour {
 			Destroy (other.gameObject);
 			health--;
 			if(health <= 0){
+				if(healthToDrop > 0){
+					GameObject healthGrub = (GameObject)Instantiate(Resources.Load("Health Grub"));
+					healthGrub.GetComponent<HealthGrubController>().healAmount = healthToDrop;
+					healthGrub.transform.position = lootAnchor.transform.position;
+				}
 				isFlying = true;
 			}
 		}

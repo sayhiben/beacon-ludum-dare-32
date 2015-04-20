@@ -8,6 +8,7 @@ public class SpiderController : EnemyController {
 	public float rotateSpeed = 50.0f;
 	public float aggroRange = 30.0f;
 	public float health = 3;
+	public float healthToDrop = 0.0f;
 	
 	public Transform shotSpawn;
 	public Camera mainCamera;
@@ -18,6 +19,14 @@ public class SpiderController : EnemyController {
 
 	void Start(){
 		player = GameObject.Find ("Player");
+	}
+	
+	void OnDestroy(){
+		if(healthToDrop > 0){
+			GameObject healthGrub = (GameObject)Instantiate(Resources.Load("Health Grub"));
+			healthGrub.GetComponent<HealthGrubController>().healAmount = healthToDrop;
+			healthGrub.transform.position = transform.position;
+		}
 	}
 
 	void Update(){
