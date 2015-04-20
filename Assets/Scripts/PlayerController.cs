@@ -40,14 +40,19 @@ public class PlayerController : MonoBehaviour {
 	private Vector3 startPosition;
 	private int wingFrame = 0;
 	private int bodyFrame = 0;
+	private GameObject levelManager;
 
 	void Start(){
 		energy = maxEnergy;
 		startPosition = transform.position;
 		rbody = GetComponent<Rigidbody>();
+		levelManager = GameObject.Find("Level Manager");
 	}
 
 	void Update(){
+		if(energy <= 0 && !levelManager.GetComponent<LevelController>().IsTransitioning()){
+			levelManager.GetComponent<LevelController>().RestartLevel();
+		}
 		UpdateLighting ();
 		HandleFire();
 		UpdatePlayerBody();

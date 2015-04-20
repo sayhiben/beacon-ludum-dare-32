@@ -13,6 +13,10 @@ public class LevelController : MonoBehaviour {
 	private int drawDepth = -1000;
 	private bool isTransitioning = false;
 
+	public bool IsTransitioning(){
+		return isTransitioning;
+	}
+
 	void FadeIn(){
 		fadeDir = -1;
 	}
@@ -28,6 +32,14 @@ public class LevelController : MonoBehaviour {
 			isTransitioning = true;
 		} else {
 			alpha = 0.01f;
+		}
+	}
+
+	public void RestartLevel(){
+		if(!isTransitioning){
+			nextSceneName = Application.loadedLevelName;
+			FadeOut ();
+			isTransitioning = true;
 		}
 	}
 
