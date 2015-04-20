@@ -9,7 +9,6 @@ public class HornetController : EnemyController {
 	public float speed;
 	public float health = 2;
 	public float healthToDrop = 10.0f;
-	public float constantRotationForce = 50.0f;
 	
 	public AudioClip deathSound;
 	
@@ -35,10 +34,6 @@ public class HornetController : EnemyController {
 		if(health <= 0){
 			Destroy(gameObject);
 		}
-	}
-
-	void FixedUpdate(){
-		rbody.AddForce(transform.right * constantRotationForce * Time.deltaTime);
 	}
 
 	void OnApplicationQuit(){
