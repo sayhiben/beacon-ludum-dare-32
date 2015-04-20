@@ -54,6 +54,10 @@ public class PlayerController : MonoBehaviour {
 		return energy / maxEnergy;
 	}
 
+	public void Heal(float healAmount){
+		energy += healAmount;
+	}
+
 	void UpdatePlayerBody(){
 		int newFrame = (int)Mathf.Ceil(EnergyPercent() / 0.2f);
 		if(newFrame != bodyFrame && newFrame > 0 && newFrame < bodyFrames.Length){
