@@ -41,11 +41,11 @@ public class FrogController : MonoBehaviour {
 			tongue.transform.localScale += new Vector3(
 				0.0f, 
 				0.0f, 
-				tongue.transform.localScale.z * expandSpeed
+				tongue.transform.localScale.z * expandSpeed * Time.deltaTime
 			);
 
 			// adjust position based on scale
-			tongue.transform.position -= tongue.transform.forward * expandSpeed * 8.0f;
+			tongue.transform.position -= tongue.transform.forward * expandSpeed * 8.0f * Time.deltaTime;
 
 			// check for contracted all the way and stop attacking
 			if(!isExpanding && tongue.transform.localScale.z <= originalScale.z){
