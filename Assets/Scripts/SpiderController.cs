@@ -29,10 +29,13 @@ public class SpiderController : EnemyController {
 	}
 	
 	void OnDestroy(){
-		if(!isQuitting && healthToDrop > 0){
-			GameObject healthGrub = (GameObject)Instantiate(Resources.Load("Health Grub"));
-			healthGrub.GetComponent<HealthGrubController>().healAmount = healthToDrop;
-			healthGrub.transform.position = transform.position;
+		if(!isQuitting){
+			AudioSource.PlayClipAtPoint(deathSound, transform.position);
+			if(healthToDrop > 0){
+				GameObject healthGrub = (GameObject)Instantiate(Resources.Load("Health Grub"));
+				healthGrub.GetComponent<HealthGrubController>().healAmount = healthToDrop;
+				healthGrub.transform.position = transform.position;
+			}
 		}
 	}
 
@@ -54,7 +57,6 @@ public class SpiderController : EnemyController {
 	public override void Hit(){
 		health--;
 		if(health <= 0){
-			AudioSource.PlayClipAtPoint(deathSound, transform.position);
 			Destroy(gameObject);
 		}
 	}
