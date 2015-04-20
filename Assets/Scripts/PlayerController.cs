@@ -70,7 +70,8 @@ public class PlayerController : MonoBehaviour {
 
 	void UpdatePlayerBody(){
 		int newFrame = (int)Mathf.Ceil(EnergyPercent() / 0.2f);
-		if(newFrame != bodyFrame && newFrame < bodyFrames.Length){
+		newFrame = Mathf.Clamp(newFrame, 0, bodyFrames.Length - 1);
+		if(newFrame != bodyFrame){
 			bodyFrame = newFrame;
 			MeshRenderer renderer = bodyBillboard.GetComponent<MeshRenderer>();
 			renderer.material.mainTexture = bodyFrames[bodyFrame];
