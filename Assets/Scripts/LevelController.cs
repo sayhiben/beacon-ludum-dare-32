@@ -6,6 +6,7 @@ public class LevelController : MonoBehaviour {
 	public string nextSceneName;
 	public Texture fadeOutTexture;
 	public float fadeSpeed = 0.3f;
+	public bool fadeInOnStart = true;
 
 	private float alpha = 1.0f;
 	private int fadeDir = -1;
@@ -21,14 +22,27 @@ public class LevelController : MonoBehaviour {
 	}
 
 	void Start(){
-		alpha = 1;
-		FadeIn();
-		isTransitioning = true;
+		if(fadeInOnStart){
+			alpha = 1;
+			FadeIn();
+			isTransitioning = true;
+		} else {
+			alpha = 0.01f;
+		}
 	}
 
 	public void NextLevel(){
-		FadeOut ();
-		isTransitioning = true;
+		if(!isTransitioning){
+			FadeOut ();
+			isTransitioning = true;
+		}
+	}
+
+	void Update(){
+		if(!isTransitioning && Input.GetKeyDown(KeyCode.Escape) && Application.loadedLevelName != "start"){
+			nextSceneName = "start";
+			NextLevel();
+		}
 	}
 
 	void OnLevelWasLoaded(int levelIndex){
