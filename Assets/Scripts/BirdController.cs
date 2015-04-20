@@ -18,6 +18,8 @@ public class BirdController : MonoBehaviour {
 	public float snapDistance = 0.5f;
 	public float healthToDrop = 0.0f;
 	public GameObject lootAnchor;
+	public AudioSource attackSound;
+	public AudioSource flyAwaySound;
 	
 	private GameObject player;
 	private int wingsTexture = 0;
@@ -42,6 +44,7 @@ public class BirdController : MonoBehaviour {
 		} else if(InAttackRange () && !isAttacking && Time.time >= nextAttackTime){
 			isAttacking = true;
 			isReaching = true;
+			attackSound.Play ();
 		}
 		Animate();
 	}
@@ -119,6 +122,7 @@ public class BirdController : MonoBehaviour {
 					healthGrub.GetComponent<HealthGrubController>().healAmount = healthToDrop;
 					healthGrub.transform.position = lootAnchor.transform.position;
 				}
+				flyAwaySound.Play();
 				isFlying = true;
 			}
 		}

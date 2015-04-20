@@ -13,6 +13,8 @@ public class SpiderController : EnemyController {
 	public Transform shotSpawn;
 	public Camera mainCamera;
 	public GameObject spiderShot;
+	public AudioClip deathSound;
+	public AudioSource shootSound;
 
 	private float nextFire;
 	private GameObject player;
@@ -37,7 +39,8 @@ public class SpiderController : EnemyController {
 	void Update(){
 		transform.LookAt(player.transform.position);
 
-		if(InRange() && Time.time >= nextFire && !player.GetComponent<PlayerController>().InWeb()){
+		if(health > 0 && InRange() && Time.time >= nextFire && !player.GetComponent<PlayerController>().InWeb()){
+			shootSound.Play();
 			nextFire = Time.time + fireDelay;
 			GameObject shot = (GameObject)Instantiate (spiderShot, shotSpawn.position, Quaternion.identity);
 			shot.transform.LookAt(player.transform);
@@ -51,7 +54,8 @@ public class SpiderController : EnemyController {
 	public override void Hit(){
 		health--;
 		if(health <= 0){
-			Destroy (gameObject);
+			AudioSource.PlayClipAtPoint(deathSound, transform.position);
+			Destroy(gameObject);
 		}
 	}
 }
