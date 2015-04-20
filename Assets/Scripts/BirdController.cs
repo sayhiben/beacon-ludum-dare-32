@@ -27,6 +27,7 @@ public class BirdController : MonoBehaviour {
 	private Vector3 originalPosition;
 	private float nextAttackTime;
 	private bool isReaching = false;
+	private bool isQuitting;
 
 	// Use this for initialization
 	void Start () {
@@ -101,6 +102,10 @@ public class BirdController : MonoBehaviour {
 	bool InAttackRange(){
 		return Vector3.Distance(player.transform.position, transform.position) <= aggroDistance;
 	}
+	
+	void OnApplicationQuit(){
+		isQuitting = true;
+	}
 
 	void OnTriggerEnter(Collider other){
 		if(other.tag == "Player"){
@@ -109,7 +114,7 @@ public class BirdController : MonoBehaviour {
 			Destroy (other.gameObject);
 			health--;
 			if(health <= 0){
-				if(healthToDrop > 0){
+				if(!isQuitting && healthToDrop > 0){
 					GameObject healthGrub = (GameObject)Instantiate(Resources.Load("Health Grub"));
 					healthGrub.GetComponent<HealthGrubController>().healAmount = healthToDrop;
 					healthGrub.transform.position = lootAnchor.transform.position;
