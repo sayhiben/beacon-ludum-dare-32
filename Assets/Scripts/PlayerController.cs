@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void HandleFire(){
-		if(Input.GetButton("Fire1") && Time.time > nextFire && energy >= fireCost) {
+		if((Input.GetKeyDown(KeyCode.Space) || Input.GetButton("Fire1")) && Time.time > nextFire && energy >= fireCost) {
 			nextFire = Time.time + fireDelay;
 			Instantiate(playerShot, shotSpawn.position, transform.rotation);
 			energy -= fireCost;
