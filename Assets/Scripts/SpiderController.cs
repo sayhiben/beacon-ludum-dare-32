@@ -29,7 +29,7 @@ public class SpiderController : EnemyController {
 	}
 	
 	void OnDestroy(){
-		if(!isQuitting){
+		if(!isQuitting && Application.isLoadingLevel){
 			AudioSource.PlayClipAtPoint(deathSound, transform.position);
 			if(healthToDrop > 0){
 				GameObject healthGrub = (GameObject)Instantiate(Resources.Load("Health Grub"));

@@ -117,7 +117,7 @@ public class BirdController : MonoBehaviour {
 			Destroy (other.gameObject);
 			health--;
 			if(health <= 0){
-				if(!isQuitting && healthToDrop > 0){
+				if(!isQuitting && !Application.isLoadingLevel && healthToDrop > 0){
 					GameObject healthGrub = (GameObject)Instantiate(Resources.Load("Health Grub"));
 					healthGrub.GetComponent<HealthGrubController>().healAmount = healthToDrop;
 					healthGrub.transform.position = lootAnchor.transform.position;

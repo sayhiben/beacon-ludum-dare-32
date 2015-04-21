@@ -5,6 +5,7 @@ public class LevelController : MonoBehaviour {
 
 	public string nextSceneName;
 	public Texture fadeOutTexture;
+	public Texture restartTexture;
 	public float fadeSpeed = 0.3f;
 	public bool fadeInOnStart = true;
 
@@ -37,6 +38,7 @@ public class LevelController : MonoBehaviour {
 
 	public void RestartLevel(){
 		if(!isTransitioning){
+			fadeOutTexture = restartTexture;
 			nextSceneName = Application.loadedLevelName;
 			FadeOut ();
 			isTransitioning = true;
