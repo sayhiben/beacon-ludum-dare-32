@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update(){
-		if(energy <= 0 && !levelManager.GetComponent<LevelController>().IsTransitioning()){
+		if(energy < fireCost && !levelManager.GetComponent<LevelController>().IsTransitioning()){
 			levelManager.GetComponent<LevelController>().RestartLevel();
 		}
 		UpdateLighting ();
